@@ -47,6 +47,19 @@ services:
     labels:
       org.label-schema.group: "monitoring"
 
+  snmpexporter:
+    image: amkay/snmp_exporter
+    container_name: snmpexporter
+    volumes:
+      - ./snmpexporter/:/etc/snmp_exporter/
+    expose:
+      - 9116
+    restart: unless-stopped
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
   nodeexporter:
     image: prom/node-exporter:v1.1.1
     container_name: nodeexporter
@@ -58,7 +71,7 @@ services:
       - '--path.procfs=/host/proc'
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|volume1)($$|/)'
     restart: unless-stopped
     expose:
       - 9100
